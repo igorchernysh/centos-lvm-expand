@@ -44,6 +44,8 @@ Live demo to illustrate how ext4 LVM volume can be resized (up) online, without 
 
 ### Usage:
 
+Start either cmd.exe or powershell.exe as administrator. This is needed for `scripts\fix-key-pair-privs.ps1` during Terraform run
+
 1. Initialize Terraform - get dependencies:
    ```
    terraform init
