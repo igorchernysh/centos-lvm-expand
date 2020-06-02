@@ -14,9 +14,10 @@ resource "null_resource" "generate_key_pair" {
     interpreter = ["cmd.exe", "/c"]
   }
 
-  # remove inheritance from key file, otherwise ssh won't work
+  # fix privileges on key pair file, otherwise ssh won't work
   provisioner "local-exec" {
-    command = "icacls key_pair.pem /inheritance:d"
+    command = "scripts\\fix-key-pair-privs.ps1"
+    interpreter = ["PowerShell", "-File"]
   }
 }
 
