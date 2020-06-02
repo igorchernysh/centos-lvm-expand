@@ -16,7 +16,7 @@ resource "null_resource" "generate_key_pair" {
 
 resource "null_resource" "cleanup_key_pair" {
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "scripts\\delete-key-pair.bat"
     interpreter = ["cmd.exe", "/c"]
   }
