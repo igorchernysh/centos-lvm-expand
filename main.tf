@@ -8,9 +8,15 @@ provider "aws" {
 }
 
 resource "null_resource" "generate_key_pair" {
+  # create ssh key pair
   provisioner "local-exec" {
     command = "scripts\\create-key-pair.bat"
     interpreter = ["cmd.exe", "/c"]
+  }
+
+  # remove inheritance from key file, otherwise ssh won't work
+  provisioner "local-exec" {
+    command = "icacls key_pair.pem /inheritance:d"
   }
 }
 
@@ -19,6 +25,7 @@ resource "null_resource" "cleanup_key_pair" {
     when    = destroy
     command = "scripts\\delete-key-pair.bat"
     interpreter = ["cmd.exe", "/c"]
+    on_failure = continue
   }
 }
 
@@ -88,8 +95,10 @@ resource "null_resource" "lvm_demo" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/lvm-demo.sh",
-      "/tmp/lvm-demo.sh > /tmp/lvm-demo.log"
+      "sudo yum install dos2unix -y",
+      "sudo dos2unix /tmp/lvm-demo.sh",
+      "sudo chmod +x /tmp/lvm-demo.sh",
+      "sudo /tmp/lvm-demo.sh > /tmp/lvm-demo.log"
     ]
   }
 
